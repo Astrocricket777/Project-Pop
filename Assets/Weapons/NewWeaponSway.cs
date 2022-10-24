@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponSway : MonoBehaviour
+public class NewWeaponSway : MonoBehaviour
 {
     [Header("Sway Options")]
     public float Smooth;

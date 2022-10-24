@@ -5,11 +5,15 @@ using UnityEngine;
 public class AnimationChecks : MonoBehaviour
 {
     public Animator TheAnimator;
+    public ParticleSystem MuzzleFlash;
+
+    public Camera Cam;
 
     void Update()
     {
         WalkCheck();
         AimCheck();
+        ShootCheck();
     }
 
     void WalkCheck()
@@ -41,10 +45,27 @@ public class AnimationChecks : MonoBehaviour
        if (Input.GetMouseButton(1)) 
        {
             TheAnimator.SetBool("IsAiming", true);
+
+            Cam.fieldOfView = 55f;
        }
        else
        {
             TheAnimator.SetBool("IsAiming", false);
+
+            Cam.fieldOfView = 70f;
        }
+    }
+
+    void ShootCheck()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            TheAnimator.SetBool("IsFiring", true);
+            MuzzleFlash.Play();
+        }
+        else
+        {
+            TheAnimator.SetBool("IsFiring", false);
+        }
     }
 }
