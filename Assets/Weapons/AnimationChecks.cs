@@ -9,6 +9,8 @@ public class AnimationChecks : MonoBehaviour
     public PlayerMovement Move;
     public GunSystem Gun;
 
+    public bool IsAiming;
+
     public Camera Cam;
 
     void Update()
@@ -16,11 +18,6 @@ public class AnimationChecks : MonoBehaviour
         WalkCheck();
         AimCheck();
         SprintCheck();
-
-        if (Gun.BulletsLeft > 0)
-        {
-            ShootCheck();
-        }
     }
 
     void WalkCheck()
@@ -53,6 +50,8 @@ public class AnimationChecks : MonoBehaviour
        {
             TheAnimator.SetBool("IsAiming", true);
 
+            IsAiming = true;
+
             Cam.fieldOfView = 55f;
        }
        else
@@ -60,37 +59,8 @@ public class AnimationChecks : MonoBehaviour
             TheAnimator.SetBool("IsAiming", false);
 
             Cam.fieldOfView = 70f;
-       }
-    }
 
-    void ShootCheck()
-    {
-        if (Gun.AllowButtonHold == true)
-        {
-            if (Input.GetMouseButton(0))
-            {
-                TheAnimator.SetBool("IsFiring", true);
-            }
-            else
-            {
-                TheAnimator.SetBool("IsFiring", false);
-            }
-            
-        }
-        else if (Gun.AllowButtonHold == false)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                TheAnimator.SetBool("IsFiring", true);
-            }
-            else
-            {
-                TheAnimator.SetBool("IsFiring", false);
-            }
-        }
-        else
-        {
-            TheAnimator.SetBool("IsFiring", false);
+            IsAiming = false; 
         }
     }
 

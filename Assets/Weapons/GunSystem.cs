@@ -12,12 +12,32 @@ public class GunSystem : MonoBehaviour
 
     bool Shooting, ReadyToShoot, Reloading;
 
+    public Animator TheAnimator;
+
     public Camera Cam;
     public RaycastHit Hit;
     public LayerMask WhatIsEnemy;
 
     public ParticleSystem MuzzleFlash;
     public GameObject BulletHole;
+
+    //Hipfire Recoil
+    public float RecoilX;
+    public float RecoilY;
+    public float RecoilZ;
+
+    //ADS recoil
+    public float AimRecoilX;
+    public float AimRecoilY;
+    public float AimRecoilZ;
+
+    public float Snappiness;
+    public float ReturnSpeed;
+
+    public Recoil GunRecoil;
+    public AnimationChecks ShootCheck;
+
+    public GameObject HitMarker;
 
     private void Awake()
     {
@@ -61,8 +81,13 @@ public class GunSystem : MonoBehaviour
         BulletsLeft--;
         BulletsShot--;
 
+        TheAnimator.SetBool("IsFiring", true);
+
         MuzzleFlash.Play();
         Instantiate(BulletHole, Hit.point, Quaternion.LookRotation(Hit.normal));
+        GunRecoil.RecoilFire();
+
+        
 
         //Spread
 
@@ -78,6 +103,8 @@ public class GunSystem : MonoBehaviour
             if (Hit.collider.CompareTag("Enemy"))
             {
                 Hit.collider.GetComponent<EnemyScript>().TakeDamage(Damage);
+
+                StartCoroutine(HitMarkerr());
             }
         }
 
@@ -92,6 +119,8 @@ public class GunSystem : MonoBehaviour
     private void ResetShoot()
     {
         ReadyToShoot = true;
+
+        TheAnimator.SetBool("IsFiring", false);
     }
 
     private void Reload()
@@ -105,5 +134,14 @@ public class GunSystem : MonoBehaviour
         BulletsLeft = MagazineSize;
 
         Reloading = false;
+    }
+
+    IEnumerator HitMarkerr()
+    {
+        HitMarker.SetActive(true);
+
+        yield return new WaitForSeconds(.25f);
+
+        HitMarker.SetActive(false);
     }
 }

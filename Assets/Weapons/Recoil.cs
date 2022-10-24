@@ -4,33 +4,38 @@ using UnityEngine;
 
 public class Recoil : MonoBehaviour
 {
+    public AnimationChecks AimCheck;
+    public GunSystem Gun;
+
+    bool IsAiming;
+
     private Vector3 CurrentRotation;
     private Vector3 TargetRotation;
 
-    [SerializeField] private float RecoilX;
-    [SerializeField] private float RecoilY;
-    [SerializeField] private float RecoilZ;
-
-    [SerializeField] private float Snappiness;
-    [SerializeField] private float ReturnSpeed;
+    
     
 
     
     void Update()
     {
-        if (Input.GetMouseButton(0))
-        {
-            RecoilFire();
-        }
 
-        TargetRotation = Vector3.Lerp(TargetRotation, Vector3.zero, ReturnSpeed * Time.deltaTime);
-        CurrentRotation = Vector3.Slerp(CurrentRotation, TargetRotation, Snappiness * Time.fixedDeltaTime);
+        IsAiming = AimCheck.IsAiming;
+
+        TargetRotation = Vector3.Lerp(TargetRotation, Vector3.zero, Gun.ReturnSpeed * Time.deltaTime);
+        CurrentRotation = Vector3.Slerp(CurrentRotation, TargetRotation, Gun.Snappiness * Time.fixedDeltaTime);
 
         transform.localRotation = Quaternion.Euler(CurrentRotation);
     }
 
     public void RecoilFire()
     {
-        TargetRotation += new Vector3(RecoilX, Random.Range(-RecoilY, RecoilY), Random.Range(-RecoilZ, RecoilZ));
+        if (IsAiming)
+        {
+            TargetRotation += new Vector3(Gun.AimRecoilX, Random.Range(-Gun.AimRecoilY, Gun.AimRecoilY), Random.Range(-Gun.AimRecoilZ, Gun.AimRecoilZ));
+        }
+        else
+        {
+            TargetRotation += new Vector3(Gun.RecoilX, Random.Range(-Gun.RecoilY, Gun.RecoilY), Random.Range(-Gun.RecoilZ, Gun.RecoilZ));
+        }
     }
 }
